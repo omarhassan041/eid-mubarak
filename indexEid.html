@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EidConnect | Share the Joy</title>
+
+    <meta name="description" content="U dhis kaar fariin qurux badan leh asxaabtaada ciidan.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://eidconnect.firebaseapp.com/"> 
+    <meta property="og:title" content="EidConnect 🌙">
+    <meta property="og:description" content="Ku soo biir bulshada oo la wadaag hambalyada ciida asxaabtaada!">
+    <meta property="og:image" content="https://eidconnect.firebaseapp.com/og-image.jpg"> 
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        .glass { 
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(10px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        }
+        body { scroll-behavior: smooth; }
+    </style>
+</head>
+
+<body class="bg-[#0f172a] text-white">
+
+<header class="flex justify-between items-center p-6 max-w-6xl mx-auto">
+    
+    <h1 class="text-2xl font-bold text-amber-400 tracking-tighter">
+        Eid-Mubarik
+    </h1>
+
+    <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-400">
+        <a href="#generator" class="hover:text-amber-400 transition">Create</a>
+        <a href="#community-section" class="hover:text-amber-400 transition">Community</a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+
+    <a href="#generator" 
+    class="bg-white text-black px-5 py-2 rounded-full font-bold text-sm">
+        Get Started
+    </a>
+
+    <!-- PROFILE -->
+  <!-- RIGHT SIDE -->
+<div class="flex items-center gap-3">
+
+    <!-- PROFILE -->
+    <div id="userBox" onclick="goProfile()" 
+    class="hidden flex items-center gap-2 bg-amber-500 px-3 py-1 rounded-full text-black text-sm font-semibold cursor-pointer">
+
+        <img id="nav-avatar" class="w-7 h-7 rounded-full object-cover">
+        <span id="nav-name"></span>
+    </div>
+
+    <!-- LOGIN -->
+    <button id="loginBtn" onclick="loginUser()" 
+    class="bg-amber-500 px-5 py-2 rounded-full text-black font-bold text-sm">
+        Login
+    </button>
+
+</div>
+</header> 
+
+<section id="profile" class="hidden max-w-4xl mx-auto px-6 py-8">
+    
+    <div class="bg-white/5 rounded-2xl p-6 flex items-center gap-6">
+
+        <img id="profile-img" 
+        class="w-20 h-20 rounded-full border-2 border-amber-400">
+
+        <div class="flex-1">
+            <h2 id="profile-name" class="text-xl font-bold"></h2>
+            <p id="profile-email" class="text-slate-400 text-sm"></p>
+
+            <div class="flex gap-6 mt-3 text-sm">
+                <p>❤️ <span id="likes-count">0</span></p>
+                <p>👥 <span id="followers-count">0</span></p>
+                <p>➡️ <span id="following-count">0</span></p>
+            </div>
+        </div>
+
+        <button onclick="logoutUser()" 
+        class="bg-red-500 px-4 py-2 rounded text-white">
+            Logout
+        </button>
+
+    </div>
+
+</section>
+
+<section class="text-center py-24 px-6 relative overflow-hidden">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent -z-10"></div>
+    
+    <h2 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight leading-tight">
+        Celebrate This <span class="text-amber-400 italic">Eid</span> 🌙
+    </h2>
+    <p class="text-slate-400 max-w-2xl mx-auto mb-10 text-lg leading-relaxed">
+        Eid with Family & Friends
+    </p>
+    <a href="#generator" class="bg-white text-black px-8 py-4 rounded-full font-bold hover:bg-amber-400 transition-all shadow-xl">
+        Start Creating Now
+    </a>
+</section>
+
+<section id="generator" class="py-20 px-6 max-w-4xl mx-auto">
+    <div class="glass rounded-[2.5rem] p-8 md:p-12 text-center shadow-2xl">
+        <h3 class="text-3xl font-bold mb-8 text-amber-400 italic">Create Your Message</h3>
+
+        <div class="max-w-md mx-auto space-y-4">
+            <input id="username" type="text"
+                oninput="updatePreview()" 
+                placeholder="Gali magacaaga / Name"
+                class="w-full px-6 py-4 rounded-2xl bg-slate-800/50 border border-slate-700 text-center text-lg focus:ring-2 focus:ring-amber-500 outline-none transition-all"/>
+
+            <textarea id="custom-message" rows="3"
+                oninput="updatePreview()"
+                placeholder="Halkan ku qor fariintaada ciida..."
+                class="w-full px-6 py-4 rounded-2xl bg-slate-800/50 border border-slate-700 text-center text-lg focus:ring-2 focus:ring-amber-500 outline-none transition-all resize-none"></textarea>
+
+            <div class="min-h-[140px] flex items-center justify-center p-6 bg-slate-900/50 rounded-2xl border border-slate-800 border-dashed">
+                <p id="message" class="text-xl text-slate-200 font-light italic leading-relaxed">
+                    "Fariintaadu halkan ayay ka soo muuqan doontaa"
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="handlePublish()"
+                    class="col-span-2 bg-amber-500 hover:bg-amber-400 text-black py-4 rounded-2xl font-bold text-lg transition-transform active:scale-95 shadow-lg shadow-amber-500/20">
+                    Publish to Community ✨
+                </button>
+
+                <button onclick="speakMessage()" class="bg-slate-800 hover:bg-slate-700 py-4 rounded-2xl font-medium flex items-center justify-center gap-2 border border-slate-700">
+                    🔊 Voice
+                </button>
+
+                <button onclick="shareWhatsApp()" class="bg-[#25D366] hover:bg-[#20ba5a] py-4 rounded-2xl text-black font-bold flex items-center justify-center gap-2">
+                    📱 WhatsApp
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="community-section" class="py-20 px-6 max-w-6xl mx-auto">
+    <div class="flex flex-col items-center mb-12">
+        <h3 class="text-3xl font-bold text-amber-400 mb-2 underline decoration-amber-500/30 underline-offset-8">🌍 Community Greetings</h3>
+        <p class="text-slate-500 italic text-sm mt-4">Fariimihii ugu dambeeyay ee laga soo diray caalamka</p>
+    </div>
+
+    <div id="community" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="animate-pulse bg-white/5 h-32 rounded-2xl border border-white/5"></div>
+        <div class="animate-pulse bg-white/5 h-32 rounded-2xl border border-white/5"></div>
+        <div class="animate-pulse bg-white/5 h-32 rounded-2xl border border-white/5"></div>
+    </div>
+</section>
+
+<footer class="text-center py-16 border-t border-slate-800/50">
+    <p class="text-slate-500 text-sm tracking-widest uppercase">
+        Developed with ❤️ by <span class="text-amber-400 font-bold">Omar Hassan Ali</span>
+    </p>
+</footer>
+
+<script>
+let currentFullMessage = "";
+
+// 1. Live Preview
+function updatePreview() {
+    const name = document.getElementById("username").value.trim();
+    const customMsg = document.getElementById("custom-message").value.trim();
+    const display = document.getElementById("message");
+
+    if (!name && !customMsg) {
+        display.innerText = "Fariintaadu halkan ayay ka soo muuqan doontaa";
+        display.classList.add("text-slate-500");
+        currentFullMessage = "";
+        return;
+    }
+
+    display.classList.remove("text-slate-500", "text-red-400");
+    
+    const greeting = name ? `Eid Mubarak ${name}!` : "Eid Mubarak!";
+    currentFullMessage = `${greeting} ${customMsg}`;
+    display.innerText = currentFullMessage;
+}
+
+// 2. Publish to Firebase
+async function handlePublish() {
+    const name = document.getElementById("username").value.trim();
+    const customMsg = document.getElementById("custom-message").value.trim();
+    const display = document.getElementById("message");
+
+    if (!name || !customMsg) {
+        display.innerText = "Fadlan qor magacaaga iyo fariinta aad rabto!";
+        display.classList.add("text-red-400");
+        return;
+    }
+
+    if (window.saveMessage && currentFullMessage) {
+        try {
+            await window.saveMessage(name, currentFullMessage);
+            document.getElementById("custom-message").value = "";
+            updatePreview(); 
+            alert("Mahadsanid! Fariintaada waa la daabacay.");
+        } catch (err) {
+            console.error("Khalad baa dhacay:", err);
+        }
+    }
+}
+
+// 3. WhatsApp Share
+function shareWhatsApp() {
+    if (!currentFullMessage || currentFullMessage === "") {
+        alert("Fadlan marka hore fariin qoro!");
+        return;
+    }
+
+    const url = `https://wa.me/?text=${encodeURIComponent(currentFullMessage)}`;
+    window.open(url, "_blank");
+}
+
+// 4. Voice Synthesis
+function speakMessage() {
+    if (!currentFullMessage || currentFullMessage === "") return;
+
+    // Jooji haddii uu hadal kale socdo
+    window.speechSynthesis.cancel();
+
+    const speech = new SpeechSynthesisUtterance(currentFullMessage);
+    
+    // Hel dhammaan codadka qalabkaagu leeyahay
+    const voices = window.speechSynthesis.getVoices();
+
+    // 1. Raadi codad tayo sare leh (High Quality/Natural)
+    // Waxaan mudnaanta siineynaa Google-ka codadkiisa ama kuwa Natural-ka ah
+    const humanVoice = voices.find(voice => 
+        (voice.name.includes('Google') || voice.name.includes('Natural')) && 
+        voice.lang.includes('en')
+    );
+
+    if (humanVoice) {
+        speech.voice = humanVoice;
+    }
+
+    // 2. Habeey codka si uu u noqdo mid dabiici ah
+    speech.pitch = 1.1; // Wax yar kor u qaad si uu u noqdo mid firfircoon
+    speech.rate = 0.85;  // Wax yar gaabi si loogu dhawaaqo si sax ah
+    speech.volume = 1;   // Codka kor u qaad
+
+    window.speechSynthesis.speak(speech);
+}
+
+// Hubi in codadka la soo raray ka hor intaan la hadlin
+window.speechSynthesis.onvoiceschanged = () => {
+    window.speechSynthesis.getVoices();
+};
+</script>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { 
+    getFirestore, collection, addDoc, onSnapshot, query, orderBy, limit,
+    serverTimestamp, doc, setDoc, getDoc, updateDoc,
+    arrayUnion, arrayRemove, increment
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+import { 
+    getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged 
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+// 1. Firebase Config (Updated with your real credentials)
+const firebaseConfig = {
+    apiKey: "AIzaSyD47-Dhp5IAEzwJuftSHjrbspQHcKFnxTk",
+    authDomain: "eidconnect.firebaseapp.com",
+    projectId: "eidconnect",
+    storageBucket: "eidconnect.firebasestorage.app",
+    messagingSenderId: "39777262425",
+    appId: "1:39777262425:web:d9ab54c1bfa9024ac58a48",
+    measurementId: "G-4WNREL5BY5"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
+
+// UI Elements
+const loginBtn = document.getElementById("loginBtn");
+const userBox = document.getElementById("userBox");
+const navName = document.getElementById("nav-name");
+const navAvatar = document.getElementById("nav-avatar");
+
+// 2. Auth State Observer
+onAuthStateChanged(auth, async (user) => {
+    const btn = document.querySelector("button[onclick='loginUser()']");
+    
+    if (user) {
+        // Update Nav UI
+        if (loginBtn) loginBtn.classList.add("hidden");
+        if (userBox) userBox.classList.remove("hidden");
+        if (navName) navName.innerText = user.displayName.split(" ")[0];
+        if (navAvatar) navAvatar.src = user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName}`;
+        if (btn) btn.innerText = user.displayName;
+
+        // Create user profile in Firestore
+        await createUserIfNotExists(user);
+    } else {
+        // Reset UI
+        if (loginBtn) loginBtn.classList.remove("hidden");
+        if (userBox) userBox.classList.add("hidden");
+        if (btn) btn.innerText = "Login";
+    }
+});
+
+async function createUserIfNotExists(user) {
+    const userRef = doc(db, "users", user.uid);
+    const snap = await getDoc(userRef);
+
+    if (!snap.exists()) {
+        await setDoc(userRef, {
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL,
+            followers: [],
+            following: [],
+            likesCount: 0,
+            createdAt: serverTimestamp()
+        });
+        console.log("New user registered ✅");
+    }
+}
+
+// ================= LOGIN =================
+window.loginUser = async () => {
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+
+        await setDoc(doc(db, "users", user.uid), {
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL,
+            lastLogin: serverTimestamp()
+        }, { merge: true });
+
+    } catch (err) {
+        alert("Login error");
+        console.error(err);
+    }
+};
+
+// ================= SAVE MESSAGE =================
+window.saveMessage = async function(name, text) {
+    if (!auth.currentUser) return alert("Login first");
+
+    await addDoc(collection(db, "messages"), {
+        uid: auth.currentUser.uid,
+        name: name,
+        text: text,
+        likes: [],
+        photo: auth.currentUser.photoURL,
+        createdAt: serverTimestamp()
+    });
+};
+
+// ================= LIKE SYSTEM =================
+window.likeMessage = async (id, ownerUid) => {
+    if (!auth.currentUser) return alert("Login first");
+
+    const userId = auth.currentUser.uid;
+    const ref = doc(db, "messages", id);
+    const snap = await getDoc(ref);
+
+    const data = snap.data();
+    const liked = data.likes?.includes(userId);
+    const userRef = doc(db, "users", ownerUid);
+
+    if (!liked) {
+        await updateDoc(ref, { likes: arrayUnion(userId) });
+        await updateDoc(userRef, { likesCount: increment(1) });
+    } else {
+        await updateDoc(ref, { likes: arrayRemove(userId) });
+        await updateDoc(userRef, { likesCount: increment(-1) });
+    }
+};
+
+// ================= FEED (Real-time) =================
+const q = query(collection(db, "messages"), orderBy("createdAt", "desc"), limit(20));
+
+onSnapshot(q, (snapshot) => {
+    const container = document.getElementById("community");
+    if (!container) return;
+    container.innerHTML = "";
+
+    if (snapshot.empty) {
+        container.innerHTML = "<p class='text-center col-span-full text-slate-400 py-10'>No posts yet 🚀 Be the first!</p>";
+        return;
+    }
+
+    snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const id = docSnap.id;
+        const liked = data.likes?.includes(auth.currentUser?.uid);
+        const avatar = data.photo || `https://ui-avatars.com/api/?name=${data.name}`;
+
+        const div = document.createElement("div");
+        div.className = "bg-white/5 p-6 rounded-2xl border border-white/5 hover:border-amber-500/30 transition-all group";
+
+        div.innerHTML = `
+            <div class="flex items-center gap-3 mb-3">
+                <img src="${avatar}" class="w-10 h-10 rounded-full border border-amber-500/20 shadow-sm">
+                <div>
+                    <p class="text-amber-400 font-bold text-sm">${data.name}</p>
+                    <p class="text-[10px] text-slate-500 uppercase tracking-tighter">Verified User</p>
+                </div>
+            </div>
+
+            <p class="italic text-slate-200 leading-relaxed">"${data.text}"</p>
+
+            <div class="flex justify-between items-center mt-5 pt-4 border-t border-white/5">
+                <button onclick="likeMessage('${id}', '${data.uid}')"
+                class="flex items-center gap-1.5 font-bold transition-colors ${liked ? 'text-red-500' : 'text-slate-500 hover:text-white'}">
+                    <i class="fas fa-heart"></i> ${data.likes?.length || 0}
+                </button>
+
+                <button onclick="followUser('${data.uid}')" 
+                class="text-xs font-bold text-amber-500/70 hover:text-amber-400 bg-amber-500/5 px-3 py-1 rounded-full border border-amber-500/10">
+                    Follow
+                </button>
+            </div>
+        `;
+        container.appendChild(div);
+    });
+});
+
+// ================= FOLLOW =================
+window.followUser = async (targetUid) => {
+    if (!auth.currentUser) return alert("Login first");
+    if (auth.currentUser.uid === targetUid) return alert("You cannot follow yourself!");
+
+    const myId = auth.currentUser.uid;
+    const me = doc(db, "users", myId);
+    const you = doc(db, "users", targetUid);
+
+    const snap = await getDoc(me);
+    const following = snap.data().following || [];
+
+    if (!following.includes(targetUid)) {
+        await updateDoc(me, { following: arrayUnion(targetUid) });
+        await updateDoc(you, { followers: arrayUnion(myId) });
+    } else {
+        await updateDoc(me, { following: arrayRemove(targetUid) });
+        await updateDoc(you, { followers: arrayRemove(myId) });
+    }
+};
+
+</script>
+</html>
