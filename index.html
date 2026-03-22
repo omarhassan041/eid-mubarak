@@ -26,44 +26,38 @@
 
 <body class="bg-[#0f172a] text-white">
 
-<header class="flex justify-between items-center p-6 max-w-6xl mx-auto">
-    
-    <h1 class="text-2xl font-bold text-amber-400 tracking-tighter">
+<header class="flex flex-col md:flex-row justify-between items-center p-4 md:p-6 max-w-6xl mx-auto gap-4">
+
+    <h1 class="text-xl md:text-2xl font-bold text-amber-400 tracking-tighter">
         Eid-Mubarik
     </h1>
 
-    <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-400">
+    <nav class="flex md:flex gap-4 md:gap-6 text-sm font-medium text-slate-400">
         <a href="#generator" class="hover:text-amber-400 transition">Create</a>
         <a href="#community-section" class="hover:text-amber-400 transition">Community</a>
     </nav>
 
-    <div class="flex items-center gap-3">
+    <div class="flex items-center gap-2 md:gap-3 flex-wrap justify-center">
 
-    <a href="#generator" 
-    class="bg-white text-black px-5 py-2 rounded-full font-bold text-sm">
-        Get Started
-    </a>
+        <a href="#generator" 
+        class="bg-white text-black px-4 md:px-5 py-2 rounded-full font-bold text-sm">
+            Get Started
+        </a>
 
-    <!-- PROFILE -->
-  <!-- RIGHT SIDE -->
-<div class="flex items-center gap-3">
+        <div id="userBox" onclick="goProfile()" 
+        class="hidden flex items-center gap-2 bg-amber-500 px-3 py-1 rounded-full text-black text-sm font-semibold cursor-pointer">
 
-    <!-- PROFILE -->
-    <div id="userBox" onclick="goProfile()" 
-    class="hidden flex items-center gap-2 bg-amber-500 px-3 py-1 rounded-full text-black text-sm font-semibold cursor-pointer">
+            <img id="nav-avatar" class="w-7 h-7 rounded-full object-cover">
+            <span id="nav-name"></span>
+        </div>
 
-        <img id="nav-avatar" class="w-7 h-7 rounded-full object-cover">
-        <span id="nav-name"></span>
+        <button id="loginBtn" onclick="loginUser()" 
+        class="bg-amber-500 px-4 md:px-5 py-2 rounded-full text-black font-bold text-sm">
+            Login
+        </button>
+
     </div>
-
-    <!-- LOGIN -->
-    <button id="loginBtn" onclick="loginUser()" 
-    class="bg-amber-500 px-5 py-2 rounded-full text-black font-bold text-sm">
-        Login
-    </button>
-
-</div>
-</header> 
+</header>
 
 <section id="profile" class="hidden max-w-4xl mx-auto px-6 py-8">
     
