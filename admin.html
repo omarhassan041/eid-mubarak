@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>EidConnect | Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      .glass {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+    </style>
+  </head>
+  <body class="bg-[#0f172a] text-white">
+    <header
+      class="p-6 border-b border-white/5 flex justify-between items-center"
+    >
+      <h1 class="text-xl font-bold text-red-500 italic">
+        <i class="fas fa-user-shield"></i> Admin Panel
+      </h1>
+      <a href="index.html" class="text-slate-400 hover:text-white text-sm"
+        ><i class="fas fa-arrow-left"></i> Back to Site</a
+      >
+
+         <a id="admin-link" href="admin.html" class="hidden bg-red-600 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-2">
+    <i class="fas fa-user-shield"></i> Admin
+</a>
+    </header>
+
+    <section id="admin-section" class="hidden py-12 px-6 max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+        <div
+          class="glass p-8 rounded-[2rem] text-center border-l-4 border-amber-500"
+        >
+          <p class="text-slate-400 text-sm uppercase tracking-widest">
+            Total Messages
+          </p>
+          <p id="total-msgs" class="text-4xl font-black text-amber-400 mt-2">
+            0
+          </p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+    <div class="glass p-8 rounded-[2rem] border-amber-500/30 text-center">
+        <p class="text-slate-400 text-sm uppercase tracking-widest mb-2">Total Messages</p>
+        <h2 id="total-count" class="text-5xl font-black text-amber-400">0</h2>
+    </div>
+
+    <div class="glass p-8 rounded-[2rem] border-green-500/30 text-center">
+        <p class="text-slate-400 text-sm uppercase tracking-widest mb-2">Today's Messages</p>
+        <h2 id="today-count" class="text-5xl font-black text-green-400">0</h2>
+    </div>
+
+    <div class="glass p-8 rounded-[2rem] border-blue-500/30 text-center">
+        <p class="text-slate-400 text-sm uppercase tracking-widest mb-2">Last Hour</p>
+        <h2 id="hour-count" class="text-5xl font-black text-blue-400">0</h2>
+    </div>
+</div>
+
+      <div class="overflow-x-auto glass rounded-[2rem] shadow-2xl">
+        <table class="w-full text-left">
+          <thead class="bg-white/5 border-b border-white/10">
+            <tr>
+              <th class="p-5 text-slate-400 font-bold text-xs uppercase">
+                User Info
+              </th>
+              <th class="p-5 text-slate-400 font-bold text-xs uppercase">
+                Message Content
+              </th>
+              <th
+                class="p-5 text-slate-400 font-bold text-xs uppercase text-center"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody id="admin-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div id="no-access" class="py-24 text-center">
+      <i class="fas fa-lock text-6xl text-slate-700 mb-4"></i>
+      <h2 class="text-2xl font-bold text-slate-500">Access Denied</h2>
+      <p class="text-slate-600 mt-2">
+        Kaliya maamulka ayaa soo geli kara halkaan.
+      </p>
+    </div>
+
+
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        collection,
+        query,
+        orderBy,
+        onSnapshot,
+        deleteDoc,
+        updateDoc,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+      } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+      // [6.1] Firebase Config (Ku rid kuwaaga)
+      const firebaseConfig = {
+        apiKey: "AIzaSyD47-Dhp5IAEzwJuftSHjrbspQHcKFnxTk",
+        authDomain: "eidconnect.firebaseapp.com",
+        projectId: "eidconnect",
+        storageBucket: "eidconnect.firebasestorage.app",
+        messagingSenderId: "39777262425",
+        appId: "1:39777262425:web:d9ab54c1bfa9024ac58a48",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+
+      // [6.2] Hubinta Admin-ka
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          const userDoc = await getDoc(doc(db, "users", user.uid));
+
+          if (userDoc.exists() && userDoc.data().isAdmin === true) {
+            document.getElementById("admin-section").classList.remove("hidden");
+            document.getElementById("no-access").classList.add("hidden");
+            loadAdminData();
+             loadAnalytics();
+          
+          } else {
+            document.getElementById("admin-section").classList.add("hidden");
+            document.getElementById("no-access").classList.remove("hidden");
+          }
+        } else {
+          document.getElementById("admin-section").classList.add("hidden");
+          document.getElementById("no-access").classList.remove("hidden");
+          
+        }
+      });
+
+      // [6.3] Soo rarida Fariimaha
+      function loadAdminData() {
+        const q = query(
+          collection(db, "messages"),
+          orderBy("createdAt", "desc"),
+        );
+        onSnapshot(q, (snapshot) => {
+          const tbody = document.getElementById("admin-table-body");
+          document.getElementById("total-msgs").innerText = snapshot.size;
+          tbody.innerHTML = "";
+
+          snapshot.forEach((docSnap) => {
+            const data = docSnap.data();
+            const id = docSnap.id;
+            const tr = document.createElement("tr");
+            tr.className =
+              "border-b border-white/5 hover:bg-white/5 transition";
+            tr.innerHTML = `
+                        <td class="p-5">
+                            <p class="font-bold text-amber-500">${data.name}</p>
+                            <p class="text-[10px] text-slate-500 font-mono">${data.uid}</p>
+                        </td>
+                        <td class="p-5 text-sm text-slate-300">${data.text}</td>
+                        <td class="p-5 flex gap-2 justify-center">
+                            <button onclick="deletePost('${id}')" class="p-2 bg-red-500/20 text-red-500 rounded-lg hover:bg-red-500 hover:text-white transition"><i class="fas fa-trash"></i></button>
+                            <button onclick="banUser('${data.uid}')" class="p-2 bg-orange-500/20 text-orange-500 rounded-lg hover:bg-orange-500 hover:text-white transition"><i class="fas fa-user-slash"></i></button>
+                        </td>
+                    `;
+            tbody.appendChild(tr);
+          });
+        });
+      }
+
+      // [6.4] Admin Functions (Kuwani hadda si toos ah ayay u shaqaynayaan)
+      window.deletePost = async (id) => {
+        if (confirm("Ma hubaal ayaad tahay inaad tirtirto fariintan?")) {
+          try {
+            await deleteDoc(doc(db, "messages", id));
+            alert("Fariinta waa la tirtiray!");
+          } catch (error) {
+            console.error("Error deleting post:", error);
+            alert("Cilad ayaa dhacday!");
+          }
+        }
+      };
+
+      window.banUser = async (uid) => {
+        if (confirm("Ma hubaal ayaad tahay inaad qofkan Ban saarto?")) {
+          try {
+            await updateDoc(doc(db, "users", uid), { isBanned: true });
+            alert("User-ka waa la xannibay!");
+          } catch (error) {
+            console.error("Error banning user:", error);
+            alert(
+              "Cilad ayaa dhacday! Hubi in user-ku jiro collection-ka users.",
+            );
+          }
+        }
+      };
+
+
+      async function loadAnalytics() {
+    const now = new Date();
+    const todayStart = new Date(now.setHours(0,0,0,0));
+    const lastHour = new Date(Date.now() - 60 * 60 * 1000);
+
+    // 1. Soo qaad dhamaan fariimaha
+    onSnapshot(collection(db, "messages"), (snapshot) => {
+        let todayMsg = 0;
+        let hourMsg = 0;
+
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.createdAt) {
+                const msgTime = data.createdAt.toDate();
+                if (msgTime > todayStart) todayMsg++;
+                if (msgTime > lastHour) hourMsg++;
+            }
+        });
+
+        // Ku bandhig shaashadda
+        document.getElementById("total-count").innerText = snapshot.size;
+        document.getElementById("today-count").innerText = todayMsg;
+        document.getElementById("hour-count").innerText = hourMsg;
+    });
+}
+
+// Ha ilaawin inaad wacdo function-ka markii Admin-ka la aqoonsado
+
+    </script>
+  </body>
+</html>
